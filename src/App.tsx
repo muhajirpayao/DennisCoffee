@@ -15,6 +15,14 @@ import heroImage from './assets/hero.jpg'
  * `tailwind.config.ts` under `theme.extend`, so class names below map 1:1
  * to the source (e.g. `bg-primary`, `text-headline-md`, `font-display-lg`).
  *
+ * Responsive strategy: mobile-first. Base classes target phones; `sm:`
+ * (≥640px) targets large phones/small tablets; `md:` (≥768px) targets
+ * tablets/small laptops; `lg:` (≥1024px) targets desktop. Grids that are
+ * single-column on mobile expand at `md:`/`lg:` so wide viewports don't
+ * show empty space. Container width is capped everywhere by
+ * `max-w-container-max` + `mx-auto` so content doesn't stretch edge-to-edge
+ * on ultra-wide screens.
+ *
  * Requires in index.html <head>:
  *  <link rel="preconnect" href="https://fonts.googleapis.com" />
  *  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;600;700&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet" />
@@ -185,23 +193,38 @@ const Reveal: React.FC<{
 // -----------------------------------------------------------------------------
 
 const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => (
-  <header className="fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between border-b border-secondary/10 bg-background/90 px-margin-mobile backdrop-blur-md">
+  <header className="fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between border-b border-secondary/10 bg-background/90 px-margin-mobile backdrop-blur-md sm:px-8 md:px-margin-desktop">
     <div className="flex items-center gap-2">
-      <img alt="Dennis Coffee Garden Logo" className="h-8 object-contain" src={LOGO_SRC} />
+      <img alt="Dennis Coffee Garden Logo" className="h-8 object-contain sm:h-9" src={LOGO_SRC} />
     </div>
+
+    {/* Mobile / tablet: hamburger triggers drawer */}
     <button
       aria-label="Open navigation menu"
-      className="text-primary transition-transform active:scale-95"
+      className="text-primary transition-transform active:scale-95 lg:hidden"
       onClick={onMenuClick}
       type="button"
     >
       <span className="material-symbols-outlined">menu</span>
     </button>
+
+    {/* Desktop: inline nav, no drawer needed */}
+    <nav className="hidden items-center gap-8 lg:flex">
+      {NAV_ITEMS.map((item) => (
+        <a
+          key={`${item.label}-${item.href}`}
+          className="font-label-md text-label-md text-on-surface-variant transition-colors hover:text-primary"
+          href={item.href}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
   </header>
 )
 
 const NavDrawer: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => (
-  <div className={`fixed inset-0 z-60 ${open ? '' : 'pointer-events-none'}`}>
+  <div className={`fixed inset-0 z-60 lg:hidden ${open ? '' : 'pointer-events-none'}`}>
     <div
       className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${
         open ? 'opacity-100' : 'opacity-0'
@@ -209,7 +232,7 @@ const NavDrawer: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onC
       onClick={onClose}
     />
     <aside
-      className={`fixed inset-y-0 left-0 z-60 flex h-full w-80 flex-col bg-surface py-6 shadow-[0_8px_30px_rgb(42,30,22,0.1)] transition-transform duration-300 ${
+      className={`fixed inset-y-0 left-0 z-60 flex h-full w-full max-w-80 flex-col bg-surface py-6 shadow-[0_8px_30px_rgb(42,30,22,0.1)] transition-transform duration-300 sm:w-80 ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -238,49 +261,58 @@ const NavDrawer: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onC
 // -----------------------------------------------------------------------------
 
 const Hero: React.FC = () => (
-   <section className="relative flex h-[85vh] items-center justify-center overflow-hidden px-margin-mobile">
-    <div className="absolute inset-0 z-0">
-      <div
-        aria-label="Cinematic close-up of dark Sulu coffee being poured into a traditional ceramic cup, steam rising softly, in a warm morning garden setting."
-        className="h-full w-full scale-110 bg-cover bg-center transition-transform duration-[10s] hover:scale-100"
-        role="img"
-        style={{ backgroundImage: `url('${HERO_IMAGE_SRC}')` }}
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
-    </div>
+  <section className="relative overflow-hidden bg-heritage-cream px-margin-mobile py-16 sm:px-8 sm:py-20 md:px-margin-desktop md:py-28">
+    <div className="mx-auto max-w-container-max md:grid md:grid-cols-2 md:items-center md:gap-16">
+      <div className="max-w-lg">
+        <span className="mb-4 block font-label-md text-label-md uppercase tracking-widest text-primary">
+          Traditional Kahawa Sug
+        </span>
 
-    <div className="relative z-10 max-w-lg text-center">
-      <span className="mb-4 inline-block rounded-full bg-white/90 px-4 py-1.5 font-label-md text-label-md uppercase tracking-widest text-primary shadow-sm backdrop-blur-sm">
-        Traditional Kahawa Sug
-      </span>
-      <h1 className="mb-4 font-display-lg text-display-lg text-on-background">Dennis Coffee Garden</h1>
-      <p className="mb-8 font-headline-md text-headline-md italic text-white/90 drop-shadow-md">
-        Home of Sulu Coffee since 1962
-      </p>
-      <div className="flex flex-col gap-4">
-        <a
-          className="rounded-lg bg-primary px-8 py-4 text-center font-label-md text-label-md text-on-primary shadow-lg shadow-primary/20 transition-transform active:scale-95"
-          href="#menu"
-        >
-          VIEW MENU
-        </a>
-<a
-  className="rounded-lg border-2 border-emerald-500 bg-white/10 px-8 py-4 text-center font-label-md text-label-md text-emerald-500 backdrop-blur-sm transition-colors hover:bg-emerald-500/20"
-  href="#story"
->
-          OUR HERITAGE
-        </a>
+        <h1 className="mb-4 font-display-lg text-4xl leading-tight text-on-background sm:text-5xl md:text-6xl">
+          A Heritage of Sulu in Every Cup
+        </h1>
+
+        <p className="mb-8 font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
+          Experience the authentic Kahawa Sug tradition, since 1962. A legacy of flavor harvested from the
+          deep volcanic soils of the Sulu Archipelago.
+        </p>
+
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row">
+          <a
+            className="flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 font-label-md text-label-md text-on-primary shadow-lg shadow-primary/20 transition-transform active:scale-95"
+            href="#story"
+          >
+            OUR STORY
+            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          </a>
+          <a
+            className="rounded-lg border-2 border-primary bg-white px-8 py-4 text-center font-label-md text-label-md text-primary transition-colors hover:bg-primary hover:text-on-primary active:scale-95"
+            href="#menu"
+          >
+            VIEW MENU
+          </a>
+        </div>
+
+        <div className="flex items-center gap-6 sm:gap-10">
+          <div>
+            <p className="text-3xl font-bold text-primary sm:text-4xl">60+</p>
+            <p className="text-caption text-on-surface-variant">Years of Tradition</p>
+          </div>
+          <div className="h-10 w-px bg-outline-variant/40" />
+          <div>
+            <p className="text-3xl font-bold text-primary sm:text-4xl">100%</p>
+            <p className="text-caption text-on-surface-variant">Native Coffee</p>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div className="pointer-events-none absolute -bottom-10 -right-10 h-48 w-48 opacity-20">
-      <div
-        className="h-full w-full"
-        style={{
-          backgroundImage: 'radial-gradient(circle at center, #3e8f6c 1px, transparent 1px)',
-          backgroundSize: '10px 10px',
-        }}
-      />
+      <div className="relative mt-12 aspect-4/5 w-full overflow-hidden rounded-3xl shadow-xl sm:aspect-video md:mt-0 md:aspect-4/5">
+        <img
+          alt="A steaming cup of traditional Sulu coffee served on a ceramic saucer."
+          className="h-full w-full object-cover"
+          src={HERO_IMAGE_SRC}
+        />
+      </div>
     </div>
   </section>
 )
@@ -290,16 +322,16 @@ const Hero: React.FC = () => (
 // -----------------------------------------------------------------------------
 
 const StorySection: React.FC = () => (
-  <section className="relative overflow-hidden bg-heritage-cream px-margin-mobile py-24" id="story">
+  <section className="relative overflow-hidden bg-heritage-cream px-margin-mobile py-16 sm:px-8 sm:py-20 md:px-margin-desktop md:py-24" id="story">
     <div className="mx-auto max-w-container-max">
       <Reveal>
         <span className="mb-4 block font-label-md text-label-md tracking-widest text-primary">OUR STORY</span>
-        <h2 className="mb-6 font-headline-lg-mobile text-headline-lg-mobile text-on-background">
+        <h2 className="mb-6 font-headline-lg-mobile text-headline-lg-mobile text-on-background md:text-headline-lg">
           What Makes Good Coffee Great?
         </h2>
       </Reveal>
 
-      <div className="space-y-12">
+      <div className="space-y-12 md:grid md:grid-cols-2 md:gap-12 md:space-y-0">
         <Reveal delayMs={100} className="flex flex-col gap-6">
           <div className="group relative aspect-video overflow-hidden rounded-2xl shadow-xl">
             <img
@@ -347,11 +379,11 @@ const HotBeveragesList: React.FC = () => (
     <h3 className="mb-8 border-b border-secondary/10 pb-2 font-label-md text-label-md uppercase tracking-[0.2em] text-secondary">
       Hot Beverages
     </h3>
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {HOT_BEVERAGES.map((beverage) => (
         <div
           key={beverage.name}
-          className="group flex items-center justify-between rounded-xl bg-surface-container-low p-4 transition-colors active:bg-primary-container"
+          className="group flex items-center justify-between rounded-xl bg-surface-container-low p-4 transition-colors active:bg-primary-container sm:flex-col sm:items-start sm:gap-6 sm:justify-start"
         >
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-primary group-active:text-on-primary-container">
@@ -361,7 +393,7 @@ const HotBeveragesList: React.FC = () => (
               {beverage.name}
             </span>
           </div>
-          <span className="material-symbols-outlined text-outline group-active:text-on-primary-container">
+          <span className="material-symbols-outlined text-outline group-active:text-on-primary-container sm:hidden">
             arrow_forward_ios
           </span>
         </div>
@@ -375,7 +407,7 @@ const BangbangSugGrid: React.FC = () => (
     <h3 className="mb-8 border-b border-secondary/10 pb-2 font-label-md text-label-md uppercase tracking-[0.2em] text-secondary">
       Bangbang Sug (Snacks)
     </h3>
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
       <div className="glass-card relative col-span-2 min-h-40 overflow-hidden rounded-3xl bg-white/70 p-6 backdrop-blur-md">
         <div className="relative z-10">
           <span className="mb-2 inline-block rounded bg-primary/10 px-2 py-1 text-caption font-bold text-primary">
@@ -399,7 +431,7 @@ const BangbangSugGrid: React.FC = () => (
         <p className="text-caption text-on-surface-variant">Purple glutinous rice</p>
       </div>
 
-      <div className="col-span-2 flex items-center justify-between rounded-3xl bg-tertiary-fixed p-5">
+      <div className="col-span-2 flex items-center justify-between rounded-3xl bg-tertiary-fixed p-5 md:col-span-4">
         <div>
           <h4 className="font-headline-md text-on-tertiary-fixed">Bangbang Bundle</h4>
           <p className="text-caption text-on-tertiary-fixed-variant">Daral, Wadjit, and Biyaki</p>
@@ -416,24 +448,28 @@ const RiceMealsList: React.FC = () => (
       Rice Meals
     </h3>
     <div className="space-y-4">
-      {RICE_MEALS.map((meal) => (
-        <div key={meal.name} className="flex items-center gap-4">
-          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl">
-            <img alt={meal.imageAlt} className="h-full w-full object-cover" src={meal.imageSrc} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+        {RICE_MEALS.map((meal) => (
+          <div key={meal.name} className="flex items-center gap-4 sm:flex-col sm:items-stretch sm:gap-3">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl sm:h-40 sm:w-full">
+              <img alt={meal.imageAlt} className="h-full w-full object-cover" src={meal.imageSrc} />
+            </div>
+            <div className="grow">
+              <h4 className="font-headline-md text-on-surface">{meal.name}</h4>
+              <p className="text-caption text-on-surface-variant">{meal.description}</p>
+            </div>
           </div>
-          <div className="grow">
-            <h4 className="font-headline-md text-on-surface">{meal.name}</h4>
-            <p className="text-caption text-on-surface-variant">{meal.description}</p>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      <div className="mt-8 rounded-3xl bg-primary p-6 text-on-primary">
-        <h4 className="mb-2 font-headline-md">Dulang Platter</h4>
-        <p className="mb-4 text-body-md opacity-90">
-          The ultimate Tausug feast for the group. Includes Tiulah Sug, Utak Utak, Beef Kulma, and more.
-        </p>
-        <span className="inline-block rounded-full bg-on-primary/10 px-4 py-2 text-caption font-bold">
+      <div className="mt-8 rounded-3xl bg-primary p-6 text-on-primary sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
+        <div>
+          <h4 className="mb-2 font-headline-md">Dulang Platter</h4>
+          <p className="mb-4 text-body-md opacity-90 sm:mb-0 sm:max-w-md">
+            The ultimate Tausug feast for the group. Includes Tiulah Sug, Utak Utak, Beef Kulma, and more.
+          </p>
+        </div>
+        <span className="inline-block shrink-0 rounded-full bg-on-primary/10 px-4 py-2 text-caption font-bold">
           Good for 5 Persons
         </span>
       </div>
@@ -442,10 +478,12 @@ const RiceMealsList: React.FC = () => (
 )
 
 const MenuSection: React.FC = () => (
-  <section className="bg-white px-margin-mobile py-24" id="menu">
+  <section className="bg-white px-margin-mobile py-16 sm:px-8 sm:py-20 md:px-margin-desktop md:py-24" id="menu">
     <div className="mx-auto max-w-container-max">
       <Reveal className="mb-16 text-center">
-        <h2 className="mb-2 font-headline-lg-mobile text-headline-lg-mobile text-primary">Our Offerings</h2>
+        <h2 className="mb-2 font-headline-lg-mobile text-headline-lg-mobile text-primary md:text-headline-lg">
+          Our Offerings
+        </h2>
         <div className="mx-auto h-1 w-16 rounded-full bg-primary/20" />
       </Reveal>
 
@@ -480,27 +518,31 @@ const BranchCard: React.FC<{ branch: Branch }> = ({ branch }) => (
 )
 
 const ContactSection: React.FC = () => (
-  <section className="bg-surface-container px-margin-mobile py-24" id="contact">
+  <section className="bg-surface-container px-margin-mobile py-16 sm:px-8 sm:py-20 md:px-margin-desktop md:py-24" id="contact">
     <div className="mx-auto max-w-container-max">
       <Reveal className="mb-12">
         <span className="mb-4 block font-label-md text-label-md tracking-widest text-primary">VISIT US</span>
-        <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-on-background">Our Branches</h2>
+        <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-on-background md:text-headline-lg">
+          Our Branches
+        </h2>
       </Reveal>
 
-      <Reveal className="space-y-6">
-        {BRANCHES.map((branch) => (
-          <BranchCard key={branch.name} branch={branch} />
-        ))}
-      </Reveal>
+      <div className="md:grid md:grid-cols-5 md:gap-8">
+        <Reveal className="space-y-6 md:col-span-2">
+          {BRANCHES.map((branch) => (
+            <BranchCard key={branch.name} branch={branch} />
+          ))}
+        </Reveal>
 
-      <Reveal className="mt-12 h-64 overflow-hidden rounded-3xl border-4 border-white shadow-lg">
-        <div
-          aria-label="Map of Zamboanga City"
-          className="h-full w-full grayscale bg-cover bg-center opacity-80"
-          role="img"
-          style={{ backgroundImage: `url('${MAP_IMAGE_SRC}')` }}
-        />
-      </Reveal>
+        <Reveal className="mt-12 h-64 overflow-hidden rounded-3xl border-4 border-white shadow-lg md:col-span-3 md:mt-0 md:h-full md:min-h-80">
+          <div
+            aria-label="Map of Zamboanga City"
+            className="h-full w-full grayscale bg-cover bg-center opacity-80"
+            role="img"
+            style={{ backgroundImage: `url('${MAP_IMAGE_SRC}')` }}
+          />
+        </Reveal>
+      </div>
     </div>
   </section>
 )
@@ -510,13 +552,15 @@ const ContactSection: React.FC = () => (
 // -----------------------------------------------------------------------------
 
 const Footer: React.FC = () => (
-  <footer className="w-full rounded-t-3xl bg-surface-container-low px-margin-mobile py-12">
+  <footer className="w-full rounded-t-3xl bg-surface-container-low px-margin-mobile py-12 sm:px-8 md:px-margin-desktop">
     <div className="mx-auto max-w-container-max">
-      <div className="mb-12">
-        <img alt="Dennis Coffee Garden Logo" className="mb-6 h-14 object-contain" src={LOGO_SRC} />
-        <p className="max-w-md font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
-          Preserving the heirloom delicacies of Sulu and empowering our community through every brew since 1962.
-        </p>
+      <div className="mb-12 md:flex md:items-end md:justify-between md:gap-8">
+        <div>
+          <img alt="Dennis Coffee Garden Logo" className="mb-6 h-14 object-contain" src={LOGO_SRC} />
+          <p className="max-w-md font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
+            Preserving the heirloom delicacies of Sulu and empowering our community through every brew since 1962.
+          </p>
+        </div>
       </div>
 
       <div className="mb-12 flex gap-4">
@@ -536,7 +580,7 @@ const Footer: React.FC = () => (
         </a>
       </div>
 
-      <div className="mb-16 grid grid-cols-2 gap-8">
+      <div className="mb-16 grid grid-cols-2 gap-8 sm:w-fit sm:grid-cols-2 sm:gap-24">
         <div className="flex flex-col gap-4">
           <h5 className="font-label-md text-label-md uppercase tracking-widest text-primary">Navigation</h5>
           <nav className="flex flex-col gap-3">
@@ -569,7 +613,7 @@ const Footer: React.FC = () => (
 
       <div className="mb-8 h-px w-full bg-outline-variant/30" />
 
-      <div className="space-y-4">
+      <div className="space-y-4 sm:flex sm:items-center sm:justify-between sm:space-y-0">
         <p className="font-caption text-caption text-on-surface-variant">
           &copy; 1962-2024 Dennis Coffee Garden. All Rights Reserved. Heritage of Sulu.
         </p>
@@ -585,7 +629,7 @@ const Footer: React.FC = () => (
 
 const Fab: React.FC<{ visible: boolean }> = ({ visible }) => (
   <div
-    className={`fixed bottom-8 right-8 z-40 transition-all duration-300 ${
+    className={`fixed bottom-6 right-6 z-40 transition-all duration-300 sm:bottom-8 sm:right-8 ${
       visible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
     }`}
   >
