@@ -230,14 +230,14 @@ const STORY_IMAGE_1_SRC =
 const STORY_IMAGE_2_SRC =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuDytfJ98E3NnOmw38k8w37WpgtqXOBewqs7EU1ZojJhwrS5nhwu26DX_R4pPxeBTrfXFMd98c_6-JhpNQdFNPmp3VpN4XJXYszMnNqK7Aj7ue2miKK9dcwdcaNVC3dQCSyorSkmqwyl857ueXAusqV0ss5PEVdk6rgVXLhtW_0404Hx3mzbEUcx2KFkqhynZTdnk041nVNOImTSl7ig-mCtRCppo6dGV5-pozXkZuoEmps8o5U3yXmSfNkxpuWRo2opZH-fwrwU03A'
 
-const MAP_IMAGE_SRC =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDgoKOlMx6bF5eWSdGJotKpWWXVkxt0LJokX_0BqYdtzKJxqsA852xpbajWu3-QfaCN59lv4n7qgOAzYh6T8FEhoda8wzxcuXWxW177t2l0wxF5sr6NmD98JhNtIAyiwMxdhYUBvIqug9CPXEJEllosHZ8c9FbgDr68XgbVMX1ajzp7A6u_s7eeA6kS6tnDW4pOUdan9iBXYS3MT8Kt-5FOOpdg7EfopJ8plJQcuG2WSkj2aHNUj_9UWXRWaHths7JINxHoREFEc90'
+const MAP_ADDRESS_QUERY = 'Dennis Coffee Garden, San Jose Road, Baliwasan, Zamboanga City'
+const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(MAP_ADDRESS_QUERY)}&t=&z=16&ie=UTF8&iwloc=&output=embed`
 
 const FACEBOOK_URL = 'https://www.facebook.com/denniscoffeegarden'
 const INSTAGRAM_URL = 'https://www.instagram.com/denniscoffeegarden/?hl=en'
 const FOODPANDA_URL =
   'https://www.foodpanda.ph/restaurant/zwux/dennis-coffee-garden-baliwasan?utm_campaign=google_reserve_place_order_action_CH-SEO_'
-const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/Dennis+Coffee+Garden'
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_ADDRESS_QUERY)}`
 
 const FacebookIcon: (props: { className?: string }) => React.JSX.Element = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -441,50 +441,51 @@ const Hero: React.FC = () => (
     {/* min-h uses svh (small viewport height) so mobile browser chrome
         doesn't cause the hero to overflow one screen; header is 4rem. */}
     <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-container-max flex-col justify-center md:min-h-0 md:grid md:grid-cols-2 md:items-center md:gap-16">
-      <div className="max-w-lg">
-        <span className="mb-3 inline-block rounded-full bg-white/70 px-3 py-1 font-label-md text-[11px] uppercase tracking-widest text-primary sm:mb-4 sm:block sm:rounded-none sm:bg-transparent sm:px-0 sm:py-0 sm:text-label-md">
+      <div className="mx-auto flex max-w-lg flex-col items-center text-center sm:mx-0 sm:items-start sm:text-left">
+        <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 font-label-md text-[11px] font-semibold uppercase tracking-widest text-primary sm:mb-4 sm:bg-transparent sm:px-0 sm:py-0 sm:text-label-md">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary sm:hidden" />
           Traditional Kahawa Sug
         </span>
 
-        <h1 className="mb-3 font-display-lg text-[28px] leading-[1.15] text-on-background sm:mb-4 sm:text-5xl sm:leading-tight md:text-6xl">
+        <h1 className="mb-3 font-display-lg text-[32px] leading-[1.15] text-on-background sm:mb-4 sm:text-5xl sm:leading-tight md:text-6xl">
           A Heritage of Sulu in Every Cup
         </h1>
 
-        <p className="mb-5 line-clamp-2 font-body-lg text-sm leading-relaxed text-on-surface-variant sm:mb-8 sm:line-clamp-none sm:text-body-lg">
+        <p className="mb-6 font-body-lg text-sm leading-relaxed text-on-surface-variant sm:mb-8 sm:text-body-lg">
           Experience the authentic Kahawa Sug tradition, since 1962. A legacy of flavor harvested from the
           deep volcanic soils of the Sulu Archipelago.
         </p>
 
-        <div className="mb-6 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:gap-4">
+        <div className="mb-6 grid w-full grid-cols-2 gap-3 sm:mb-10 sm:flex sm:w-auto sm:gap-4">
           <a
-            className="flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-3 font-label-md text-label-md text-on-primary shadow-lg shadow-primary/20 transition-transform active:scale-95 sm:py-4"
+            className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-3.5 text-center font-label-md text-[13px] font-semibold text-on-primary shadow-lg shadow-primary/25 transition-transform active:scale-95 sm:rounded-lg sm:px-8 sm:py-4 sm:text-label-md"
             href="#story"
           >
-            OUR STORY
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+            Our Story
+            <span className="material-symbols-outlined text-base sm:text-lg">arrow_forward</span>
           </a>
           <a
-            className="rounded-lg border-2 border-primary bg-white px-8 py-3 text-center font-label-md text-label-md text-primary transition-colors hover:bg-primary hover:text-on-primary active:scale-95 sm:py-4"
+            className="flex items-center justify-center rounded-full border-2 border-primary bg-white px-4 py-3.5 text-center font-label-md text-[13px] font-semibold text-primary transition-colors hover:bg-primary hover:text-on-primary active:scale-95 sm:rounded-lg sm:px-8 sm:py-4 sm:text-label-md"
             href="#menu"
           >
-            VIEW MENU
+            View Menu
           </a>
         </div>
 
-        <div className="hidden items-center gap-6 sm:flex sm:gap-10">
+        <div className="flex items-center gap-6 sm:gap-10">
           <div>
-            <p className="text-3xl font-bold text-primary sm:text-4xl">60+</p>
-            <p className="text-caption text-on-surface-variant">Years of Tradition</p>
+            <p className="text-2xl font-bold text-primary sm:text-4xl">60+</p>
+            <p className="text-[11px] text-on-surface-variant sm:text-caption">Years of Tradition</p>
           </div>
-          <div className="h-10 w-px bg-outline-variant/40" />
+          <div className="h-8 w-px bg-outline-variant/40 sm:h-10" />
           <div>
-            <p className="text-3xl font-bold text-primary sm:text-4xl">100%</p>
-            <p className="text-caption text-on-surface-variant">Native Coffee</p>
+            <p className="text-2xl font-bold text-primary sm:text-4xl">100%</p>
+            <p className="text-[11px] text-on-surface-variant sm:text-caption">Native Coffee</p>
           </div>
         </div>
       </div>
 
-      <div className="relative mt-4 aspect-video max-h-[26vh] w-full shrink-0 overflow-hidden rounded-2xl shadow-xl sm:mt-12 sm:aspect-video sm:max-h-none sm:rounded-3xl md:mt-0 md:aspect-4/5">
+      <div className="relative mt-6 aspect-[4/3] max-h-[24vh] w-full shrink-0 overflow-hidden rounded-2xl shadow-xl sm:mt-12 sm:aspect-video sm:max-h-none sm:rounded-3xl md:mt-0 md:aspect-4/5">
         <img
           alt="A steaming cup of traditional Sulu coffee served on a ceramic saucer."
           className="h-full w-full object-cover"
@@ -714,20 +715,23 @@ const ContactSection: React.FC = () => (
           ))}
         </Reveal>
 
-        <Reveal className="mt-12 h-64 overflow-hidden rounded-3xl border-4 border-white shadow-lg md:col-span-3 md:mt-0 md:h-full md:min-h-80">
+        <Reveal className="relative mt-12 h-64 overflow-hidden rounded-3xl border-4 border-white shadow-lg md:col-span-3 md:mt-0 md:h-full md:min-h-80">
+          <iframe
+            title="Dennis Coffee Garden location on Google Maps"
+            src={MAP_EMBED_SRC}
+            className="h-full w-full grayscale-[15%] transition-[filter] duration-300 hover:grayscale-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
           <a
             href={GOOGLE_MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Open Dennis Coffee Garden location in Google Maps"
-            className="block h-full w-full"
+            aria-label="Open Dennis Coffee Garden in Google Maps"
+            className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-label-md text-caption font-semibold text-primary shadow-md transition-transform hover:scale-105 active:scale-95"
           >
-            <div
-              aria-label="Map of Zamboanga City"
-              className="h-full w-full grayscale bg-cover bg-center opacity-80 transition-opacity hover:opacity-100"
-              role="img"
-              style={{ backgroundImage: `url('${MAP_IMAGE_SRC}')` }}
-            />
+            <span className="material-symbols-outlined text-base">open_in_new</span>
+            Get Directions
           </a>
         </Reveal>
       </div>
@@ -740,12 +744,12 @@ const ContactSection: React.FC = () => (
 // -----------------------------------------------------------------------------
 
 const Footer: React.FC = () => (
-  <footer className="w-full rounded-t-3xl bg-surface-container-low px-margin-mobile py-8 sm:px-8 sm:py-12 md:px-margin-desktop">
+  <footer className="w-full rounded-t-3xl bg-surface-container-low px-margin-mobile py-6 sm:px-8 sm:py-12 md:px-margin-desktop">
     <div className="mx-auto max-w-container-max">
-      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-end sm:justify-between sm:gap-8 sm:text-left">
+      <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-end sm:justify-between sm:gap-8 sm:text-left">
         <div>
-          <img alt="Dennis Coffee Garden Logo" className="mx-auto mb-3 h-9 object-contain sm:mx-0 sm:mb-6 sm:h-14" src={LOGO_SRC} />
-          <p className="mx-auto line-clamp-2 max-w-xs font-body-lg text-caption leading-relaxed text-on-surface-variant sm:mx-0 sm:line-clamp-none sm:max-w-md sm:text-body-lg">
+          <img alt="Dennis Coffee Garden Logo" className="mx-auto mb-2 h-8 object-contain sm:mx-0 sm:mb-6 sm:h-14" src={LOGO_SRC} />
+          <p className="mx-auto line-clamp-2 max-w-xs font-body-lg text-[11px] leading-relaxed text-on-surface-variant sm:mx-0 sm:line-clamp-none sm:max-w-md sm:text-body-lg">
             Preserving the heirloom delicacies of Sulu and empowering our community since 1962.
           </p>
         </div>
@@ -758,7 +762,7 @@ const Footer: React.FC = () => (
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-on-primary sm:h-10 sm:w-10"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-on-primary sm:h-10 sm:w-10"
             >
               <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
@@ -766,18 +770,18 @@ const Footer: React.FC = () => (
         </div>
       </div>
 
-      <nav className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center sm:mt-10 sm:justify-start sm:text-left">
-        <a className="text-caption text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#story">
+      <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-center sm:mt-10 sm:justify-start sm:text-left">
+        <a className="text-[11px] text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#story">
           Our Story
         </a>
-        <a className="text-caption text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#menu">
+        <a className="text-[11px] text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#menu">
           Menu
         </a>
-        <a className="text-caption text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#contact">
+        <a className="text-[11px] text-on-surface-variant transition-colors hover:text-primary sm:text-body-md" href="#contact">
           Contact Us
         </a>
         <a
-          className="text-caption text-on-surface-variant transition-colors hover:text-primary sm:text-body-md"
+          className="text-[11px] text-on-surface-variant transition-colors hover:text-primary sm:text-body-md"
           href={FOODPANDA_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -785,7 +789,7 @@ const Footer: React.FC = () => (
           foodpanda
         </a>
         <a
-          className="text-caption text-on-surface-variant transition-colors hover:text-primary sm:text-body-md"
+          className="text-[11px] text-on-surface-variant transition-colors hover:text-primary sm:text-body-md"
           href={GOOGLE_MAPS_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -794,13 +798,13 @@ const Footer: React.FC = () => (
         </a>
       </nav>
 
-      <div className="my-6 h-px w-full bg-outline-variant/30 sm:my-8" />
+      <div className="my-4 h-px w-full bg-outline-variant/30 sm:my-8" />
 
       <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:text-left">
-        <p className="font-caption text-[11px] text-on-surface-variant sm:text-caption">
+        <p className="font-caption text-[10px] text-on-surface-variant sm:text-caption">
           &copy; 1962-2024 Dennis Coffee Garden. All Rights Reserved.
         </p>
-        <p className="text-[11px] italic text-secondary sm:text-body-md">Crafted with respect for Tausug tradition.</p>
+        <p className="text-[10px] italic text-secondary sm:text-body-md">Crafted with respect for Tausug tradition.</p>
       </div>
     </div>
   </footer>
