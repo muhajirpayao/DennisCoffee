@@ -485,7 +485,7 @@ const Hero: React.FC = () => (
         </div>
       </div>
 
-      <div className="relative mt-6 aspect-[4/3] max-h-[24vh] w-full shrink-0 overflow-hidden rounded-2xl shadow-xl sm:mt-12 sm:aspect-video sm:max-h-none sm:rounded-3xl md:mt-0 md:aspect-4/5">
+      <div className="relative mt-6 aspect-4/3 max-h-[24vh] w-full shrink-0 overflow-hidden rounded-2xl shadow-xl sm:mt-12 sm:aspect-video sm:max-h-none sm:rounded-3xl md:mt-0 md:aspect-4/5">
         <img
           alt="A steaming cup of traditional Sulu coffee served on a ceramic saucer."
           className="h-full w-full object-cover"
@@ -719,7 +719,7 @@ const ContactSection: React.FC = () => (
           <iframe
             title="Dennis Coffee Garden location on Google Maps"
             src={MAP_EMBED_SRC}
-            className="h-full w-full grayscale-[15%] transition-[filter] duration-300 hover:grayscale-0"
+            className="h-full w-full grayscale-15 transition-[filter] duration-300 hover:grayscale-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
@@ -802,7 +802,7 @@ const Footer: React.FC = () => (
 
       <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:text-left">
         <p className="font-caption text-[10px] text-on-surface-variant sm:text-caption">
-          &copy; 1962-2024 Dennis Coffee Garden. All Rights Reserved.
+          &copy; 1962-2026 Dennis Coffee Garden. All Rights Reserved.
         </p>
         <p className="text-[10px] italic text-secondary sm:text-body-md">Crafted with respect for Tausug tradition.</p>
       </div>
